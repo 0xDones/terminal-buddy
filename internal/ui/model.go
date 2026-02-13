@@ -5,7 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"clo/internal/config"
+	"tb/internal/clipboard"
+	"tb/internal/config"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -45,7 +46,9 @@ type Model struct {
 }
 
 // New creates the TUI model from loaded commands.
+// Must be called after the lipgloss default renderer is configured.
 func New(commands []config.Command, categories []string) Model {
+	initStyles()
 	ti := textinput.New()
 	ti.Placeholder = "type to search..."
 	ti.Prompt = "/ "
@@ -191,6 +194,15 @@ func (m Model) handleNavigationKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if len(m.filtered) > 0 {
 			m = m.initEditForm()
 			return m, textinput.Blink
+		}
+	case key.Matches(msg, keys.Copy):
+		if len(m.filtered) > 0 {
+			cmd := m.filtered[m.cursor]
+			if err := clipboard.Write(cmd.Command); err != nil {
+				m.statusMsg = "Clipboard unavailable"
+			} else {
+				m.statusMsg = "Copied to clipboard"
+			}
 		}
 	case key.Matches(msg, keys.Delete):
 		if len(m.filtered) > 0 {

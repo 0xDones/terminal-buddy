@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"clo/internal/config"
+	"tb/internal/config"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -20,13 +20,7 @@ const (
 	numFields
 )
 
-var fieldLabels = [numFields]string{"Name:", "Description:", "Command:", "Category:"}
-var fieldPlaceholders = [numFields]string{
-	"command name (required)",
-	"short description",
-	"shell command (required)",
-	"category (optional)",
-}
+var fieldLabels = [numFields]string{"Name (*)", "Description", "Command (*)", "Category"}
 
 func (m Model) initCreateForm() Model {
 	m.mode = modeForm
@@ -34,9 +28,9 @@ func (m Model) initCreateForm() Model {
 	m.formErr = ""
 	for i := 0; i < numFields; i++ {
 		ti := textinput.New()
-		ti.Placeholder = fieldPlaceholders[i]
+		ti.Prompt = "  "
 		ti.CharLimit = 256
-		ti.PromptStyle = lipgloss.NewStyle().Foreground(clrAccent)
+		ti.PromptStyle = lipgloss.NewStyle()
 		ti.TextStyle = lipgloss.NewStyle().Foreground(clrTextPri)
 		ti.PlaceholderStyle = lipgloss.NewStyle().Foreground(clrTextSec)
 		ti.Cursor.Style = lipgloss.NewStyle().Foreground(clrAccent)
@@ -145,20 +139,29 @@ func (m Model) renderForm() string {
 
 	var rows []string
 	for i := 0; i < numFields; i++ {
+		labelText := "  " + fieldLabels[i]
+
 		var label string
 		if i == m.formFocused {
-			label = formFocusedLabelStyle.Render(fieldLabels[i])
+			label = formFocusedLabelStyle.Render(labelText)
 		} else {
-			label = formLabelStyle.Render(fieldLabels[i])
+			label = formLabelStyle.Render(labelText)
 		}
+
 		input := m.formFields[i].View()
-		rows = append(rows, label+" "+input)
+
+		if i == m.formFocused {
+			underline := formUnderlineStyle.Render("  " + strings.Repeat("─", 30))
+			rows = append(rows, label+"\n"+input+"\n"+underline)
+		} else {
+			rows = append(rows, label+"\n"+input)
+		}
 	}
 	body := strings.Join(rows, "\n\n")
 
 	var errLine string
 	if m.formErr != "" {
-		errLine = "\n" + formErrStyle.Render(" ✗ "+m.formErr)
+		errLine = "\n" + formErrStyle.Render("  ✗ "+m.formErr)
 	}
 
 	content := lipgloss.JoinVertical(lipgloss.Left,

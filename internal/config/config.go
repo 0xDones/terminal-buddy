@@ -8,7 +8,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const configFileName = ".clo.yaml"
+const configFileName = ".tb.yaml"
 
 type Config struct {
 	Commands []Command `yaml:"commands"`
@@ -21,7 +21,7 @@ type Command struct {
 	Category    string `yaml:"category"`
 }
 
-// Load reads ~/.clo.yaml. Creates a default file if it doesn't exist.
+// Load reads ~/.tb.yaml. Creates a default file if it doesn't exist.
 func Load() (*Config, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -44,7 +44,7 @@ func Load() (*Config, error) {
 	return &cfg, nil
 }
 
-// Save writes the command list to ~/.clo.yaml, replacing the file contents.
+// Save writes the command list to ~/.tb.yaml, replacing the file contents.
 func Save(commands []Command) error {
 	home, err := os.UserHomeDir()
 	if err != nil {

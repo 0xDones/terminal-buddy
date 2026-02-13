@@ -19,119 +19,160 @@ const (
 	clrWarning   = lipgloss.Color("214") // orange
 )
 
+// Styles are declared here and initialized lazily via initStyles() so that
+// they pick up the correct lipgloss renderer (which main configures to use
+// stderr before calling ui.New).
 var (
 	// ── Application frame ───────────────────────────────────────────
-	frameStyle = lipgloss.NewStyle().
-			BorderStyle(lipgloss.RoundedBorder()).
-			BorderForeground(clrBorder).
-			Padding(0, 1)
+	frameStyle lipgloss.Style
 
 	// ── Thin rule (horizontal separator) ────────────────────────────
-	thinRuleStyle = lipgloss.NewStyle().
-			Foreground(clrTextMuted)
+	thinRuleStyle lipgloss.Style
 
 	// ── Tab styles ──────────────────────────────────────────────────
-	activeTabStyle = lipgloss.NewStyle().
-			Bold(true).
-			Foreground(clrNearBlack).
-			Background(clrAccent).
-			Padding(0, 2)
-
-	inactiveTabStyle = lipgloss.NewStyle().
-				Foreground(clrTextSec).
-				Padding(0, 1)
+	activeTabStyle   lipgloss.Style
+	inactiveTabStyle lipgloss.Style
 
 	// ── List item styles ────────────────────────────────────────────
-	cursorStyle = lipgloss.NewStyle().
-			Bold(true).
-			Foreground(clrAccent)
-
-	selectedItemStyle = lipgloss.NewStyle().
-				Foreground(clrAccent).
-				Background(clrHighBg).
-				Bold(true)
-
-	normalItemStyle = lipgloss.NewStyle().
-			Foreground(clrTextPri)
-
-	scrollIndicatorStyle = lipgloss.NewStyle().
-				Foreground(clrTextSec)
+	cursorStyle          lipgloss.Style
+	selectedItemStyle    lipgloss.Style
+	normalItemStyle      lipgloss.Style
+	scrollIndicatorStyle lipgloss.Style
 
 	// ── Detail pane styles ──────────────────────────────────────────
-	detailBoxStyle = lipgloss.NewStyle().
-			BorderStyle(lipgloss.RoundedBorder()).
-			BorderForeground(clrBorder).
-			Padding(0, 1)
-
-	detailTitleStyle = lipgloss.NewStyle().
-				Bold(true).
-				Foreground(clrAccent)
-
-	detailLabelStyle = lipgloss.NewStyle().
-				Bold(true).
-				Foreground(clrAccentDim)
-
-	detailValueStyle = lipgloss.NewStyle().
-				Foreground(clrTextPri)
-
-	commandValueStyle = lipgloss.NewStyle().
-				Foreground(clrCmdText)
-
-	categoryTagStyle = lipgloss.NewStyle().
-				Foreground(clrTextSec).
-				Italic(true)
+	detailBoxStyle    lipgloss.Style
+	detailTitleStyle  lipgloss.Style
+	detailLabelStyle  lipgloss.Style
+	detailValueStyle  lipgloss.Style
+	commandValueStyle lipgloss.Style
+	categoryTagStyle  lipgloss.Style
 
 	// ── Search bar styles ───────────────────────────────────────────
-	searchPromptStyle = lipgloss.NewStyle().
-				Foreground(clrAccent)
+	searchPromptStyle lipgloss.Style
 
 	// ── Help bar styles ─────────────────────────────────────────────
-	helpKeyStyle = lipgloss.NewStyle().
-			Foreground(clrAccentDim)
-
-	helpDescStyle = lipgloss.NewStyle().
-			Foreground(clrTextSec)
-
-	helpSepStyle = lipgloss.NewStyle().
-			Foreground(clrTextMuted)
+	helpKeyStyle  lipgloss.Style
+	helpDescStyle lipgloss.Style
+	helpSepStyle  lipgloss.Style
 
 	// ── Form styles ─────────────────────────────────────────────────
-	formContainerStyle = lipgloss.NewStyle().
-				BorderStyle(lipgloss.RoundedBorder()).
-				BorderForeground(clrAccent).
-				Padding(1, 2)
-
-	formHeaderStyle = lipgloss.NewStyle().
-			Bold(true).
-			Foreground(clrNearBlack).
-			Background(clrAccent).
-			Padding(0, 2)
-
-	formLabelStyle = lipgloss.NewStyle().
-			Bold(true).
-			Foreground(clrAccentDim).
-			Width(14).
-			Align(lipgloss.Right)
-
-	formFocusedLabelStyle = lipgloss.NewStyle().
-				Bold(true).
-				Foreground(clrAccent).
-				Width(14).
-				Align(lipgloss.Right)
-
-	formErrStyle = lipgloss.NewStyle().
-			Foreground(clrError)
+	formContainerStyle    lipgloss.Style
+	formHeaderStyle       lipgloss.Style
+	formLabelStyle        lipgloss.Style
+	formFocusedLabelStyle lipgloss.Style
+	formUnderlineStyle    lipgloss.Style
+	formErrStyle          lipgloss.Style
 
 	// ── Status / confirmation styles ────────────────────────────────
+	statusMsgStyle     lipgloss.Style
+	deleteConfirmStyle lipgloss.Style
+	deleteBoxStyle     lipgloss.Style
+)
+
+// initStyles creates all lipgloss styles. Must be called after the default
+// lipgloss renderer has been configured (e.g., to use stderr).
+func initStyles() {
+	frameStyle = lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(clrBorder).
+		Padding(0, 1)
+
+	thinRuleStyle = lipgloss.NewStyle().
+		Foreground(clrTextMuted)
+
+	activeTabStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(clrNearBlack).
+		Background(clrAccent).
+		Padding(0, 2)
+
+	inactiveTabStyle = lipgloss.NewStyle().
+		Foreground(clrTextSec).
+		Padding(0, 1)
+
+	cursorStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(clrAccent)
+
+	selectedItemStyle = lipgloss.NewStyle().
+		Foreground(clrAccent).
+		Background(clrHighBg).
+		Bold(true)
+
+	normalItemStyle = lipgloss.NewStyle().
+		Foreground(clrTextPri)
+
+	scrollIndicatorStyle = lipgloss.NewStyle().
+		Foreground(clrTextSec)
+
+	detailBoxStyle = lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(clrBorder).
+		Padding(0, 1)
+
+	detailTitleStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(clrAccent)
+
+	detailLabelStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(clrAccentDim)
+
+	detailValueStyle = lipgloss.NewStyle().
+		Foreground(clrTextPri)
+
+	commandValueStyle = lipgloss.NewStyle().
+		Foreground(clrCmdText)
+
+	categoryTagStyle = lipgloss.NewStyle().
+		Foreground(clrTextSec).
+		Italic(true)
+
+	searchPromptStyle = lipgloss.NewStyle().
+		Foreground(clrAccent)
+
+	helpKeyStyle = lipgloss.NewStyle().
+		Foreground(clrAccentDim)
+
+	helpDescStyle = lipgloss.NewStyle().
+		Foreground(clrTextSec)
+
+	helpSepStyle = lipgloss.NewStyle().
+		Foreground(clrTextMuted)
+
+	formContainerStyle = lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(clrAccent).
+		Padding(1, 2)
+
+	formHeaderStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(clrNearBlack).
+		Background(clrAccent).
+		Padding(0, 2)
+
+	formLabelStyle = lipgloss.NewStyle().
+		Foreground(clrTextSec)
+
+	formFocusedLabelStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(clrAccent)
+
+	formUnderlineStyle = lipgloss.NewStyle().
+		Foreground(clrAccent)
+
+	formErrStyle = lipgloss.NewStyle().
+		Foreground(clrError)
+
 	statusMsgStyle = lipgloss.NewStyle().
-			Foreground(clrSuccess)
+		Foreground(clrSuccess)
 
 	deleteConfirmStyle = lipgloss.NewStyle().
-				Foreground(clrWarning).
-				Bold(true)
+		Foreground(clrWarning).
+		Bold(true)
 
 	deleteBoxStyle = lipgloss.NewStyle().
-			BorderStyle(lipgloss.RoundedBorder()).
-			BorderForeground(clrWarning).
-			Padding(1, 3)
-)
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(clrWarning).
+		Padding(1, 3)
+}

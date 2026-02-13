@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`clo` is a Go module (Go 1.25.6). The project is in early stages.
+`tb` (terminal-buddy) is a Go module (Go 1.25.6). The project is in early stages.
 
 ## Build & Development Commands
 

@@ -10,6 +10,7 @@ type keyMap struct {
 	Search   key.Binding
 	ClearEsc key.Binding
 	Select   key.Binding
+	Copy     key.Binding
 	Quit     key.Binding
 	// Command management
 	Create      key.Binding
@@ -27,6 +28,7 @@ var keys = keyMap{
 	Search:      key.NewBinding(key.WithKeys("/"), key.WithHelp("/", "search")),
 	ClearEsc:    key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", "clear/exit search")),
 	Select:      key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", "select")),
+	Copy:        key.NewBinding(key.WithKeys("c"), key.WithHelp("c", "copy")),
 	Quit:        key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q", "quit")),
 	Create:      key.NewBinding(key.WithKeys("n"), key.WithHelp("n", "new")),
 	Edit:        key.NewBinding(key.WithKeys("e"), key.WithHelp("e", "edit")),
@@ -36,7 +38,7 @@ var keys = keyMap{
 }
 
 func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Up, k.Down, k.NextTab, k.Search, k.Select, k.Create, k.Edit, k.Delete, k.Quit}
+	return []key.Binding{k.Up, k.Down, k.NextTab, k.Search, k.Select, k.Copy, k.Create, k.Edit, k.Delete, k.Quit}
 }
 
 func (k keyMap) FullHelp() [][]key.Binding {
@@ -44,7 +46,7 @@ func (k keyMap) FullHelp() [][]key.Binding {
 		{k.Up, k.Down},
 		{k.NextTab, k.PrevTab},
 		{k.Search, k.ClearEsc},
-		{k.Select, k.Quit},
+		{k.Select, k.Copy, k.Quit},
 		{k.Create, k.Edit, k.Delete},
 	}
 }
