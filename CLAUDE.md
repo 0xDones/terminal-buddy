@@ -9,8 +9,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build & Development Commands
 
 ```bash
-# Build
-go build ./...
+# Build (version auto-derived from git tags)
+make build
+
+# Build without make
+go build -ldflags "-X main.version=$(git describe --tags --always --dirty)" -o tb .
 
 # Run tests
 go test ./...
@@ -19,11 +22,11 @@ go test ./...
 go test ./path/to/package -run TestName
 
 # Vet / lint
-go vet ./...
+make vet
 
 # Format code
-gofmt -w .
+make fmt
 
 # Tidy dependencies
-go mod tidy
+make tidy
 ```

@@ -47,7 +47,8 @@ type Model struct {
 
 // New creates the TUI model from loaded commands.
 // Must be called after the lipgloss default renderer is configured.
-func New(commands []config.Command, categories []string) Model {
+func New(commands []config.Command, categories []string, kb config.Keybindings) Model {
+	initKeys(kb)
 	initStyles()
 	ti := textinput.New()
 	ti.Placeholder = "type to search..."

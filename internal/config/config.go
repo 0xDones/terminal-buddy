@@ -10,8 +10,24 @@ import (
 
 const configFileName = ".tb.yaml"
 
+type Keybindings struct {
+	Up       []string `yaml:"up,omitempty"`
+	Down     []string `yaml:"down,omitempty"`
+	NextTab  []string `yaml:"next_tab,omitempty"`
+	PrevTab  []string `yaml:"prev_tab,omitempty"`
+	Search   []string `yaml:"search,omitempty"`
+	ClearEsc []string `yaml:"clear_esc,omitempty"`
+	Select   []string `yaml:"select,omitempty"`
+	Copy     []string `yaml:"copy,omitempty"`
+	Quit     []string `yaml:"quit,omitempty"`
+	Create   []string `yaml:"create,omitempty"`
+	Edit     []string `yaml:"edit,omitempty"`
+	Delete   []string `yaml:"delete,omitempty"`
+}
+
 type Config struct {
-	Commands []Command `yaml:"commands"`
+	Commands    []Command   `yaml:"commands"`
+	Keybindings Keybindings `yaml:"keybindings,omitempty"`
 }
 
 type Command struct {
@@ -44,7 +60,7 @@ func Load() (*Config, error) {
 	return &cfg, nil
 }
 
-// Save writes the command list to ~/.tb.yaml, replacing the file contents.
+// Save writes the command list to ~/.tb.yaml, preserving non-command fields (e.g., keybindings).
 func Save(commands []Command) error {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -52,8 +68,14 @@ func Save(commands []Command) error {
 	}
 	path := filepath.Join(home, configFileName)
 
-	cfg := &Config{Commands: commands}
-	data, err := yaml.Marshal(cfg)
+	// Read existing config to preserve non-command fields (e.g., keybindings)
+	var cfg Config
+	if data, err := os.ReadFile(path); err == nil {
+		_ = yaml.Unmarshal(data, &cfg)
+	}
+	cfg.Commands = commands
+
+	data, err := yaml.Marshal(&cfg)
 	if err != nil {
 		return err
 	}

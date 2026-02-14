@@ -1,6 +1,12 @@
 package ui
 
-import "github.com/charmbracelet/bubbles/key"
+import (
+	"strings"
+
+	"tb/internal/config"
+
+	"github.com/charmbracelet/bubbles/key"
+)
 
 type keyMap struct {
 	Up       key.Binding
@@ -20,21 +26,50 @@ type keyMap struct {
 	FormBackTab key.Binding
 }
 
-var keys = keyMap{
-	Up:          key.NewBinding(key.WithKeys("up", "k"), key.WithHelp("↑/k", "up")),
-	Down:        key.NewBinding(key.WithKeys("down", "j"), key.WithHelp("↓/j", "down")),
-	NextTab:     key.NewBinding(key.WithKeys("tab"), key.WithHelp("tab", "next tab")),
-	PrevTab:     key.NewBinding(key.WithKeys("shift+tab"), key.WithHelp("shift+tab", "prev tab")),
-	Search:      key.NewBinding(key.WithKeys("/"), key.WithHelp("/", "search")),
-	ClearEsc:    key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", "clear/exit search")),
-	Select:      key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", "select")),
-	Copy:        key.NewBinding(key.WithKeys("c"), key.WithHelp("c", "copy")),
-	Quit:        key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q", "quit")),
-	Create:      key.NewBinding(key.WithKeys("n"), key.WithHelp("n", "new")),
-	Edit:        key.NewBinding(key.WithKeys("e"), key.WithHelp("e", "edit")),
-	Delete:      key.NewBinding(key.WithKeys("d"), key.WithHelp("d", "delete")),
-	FormTab:     key.NewBinding(key.WithKeys("tab"), key.WithHelp("tab", "next field")),
-	FormBackTab: key.NewBinding(key.WithKeys("shift+tab"), key.WithHelp("shift+tab", "prev field")),
+var keys keyMap
+
+// keyDisplayNames maps BubbleTea key identifiers to display characters.
+var keyDisplayNames = map[string]string{
+	"up": "↑", "down": "↓", "left": "←", "right": "→",
+}
+
+func helpKeyLabel(keyList []string) string {
+	parts := make([]string, len(keyList))
+	for i, k := range keyList {
+		if d, ok := keyDisplayNames[k]; ok {
+			parts[i] = d
+		} else {
+			parts[i] = k
+		}
+	}
+	return strings.Join(parts, "/")
+}
+
+func buildBinding(configured []string, defaults []string, helpDesc string) key.Binding {
+	k := defaults
+	if len(configured) > 0 {
+		k = configured
+	}
+	return key.NewBinding(key.WithKeys(k...), key.WithHelp(helpKeyLabel(k), helpDesc))
+}
+
+func initKeys(kb config.Keybindings) {
+	keys = keyMap{
+		Up:          buildBinding(kb.Up, []string{"up", "k"}, "up"),
+		Down:        buildBinding(kb.Down, []string{"down", "j"}, "down"),
+		NextTab:     buildBinding(kb.NextTab, []string{"tab"}, "next tab"),
+		PrevTab:     buildBinding(kb.PrevTab, []string{"shift+tab"}, "prev tab"),
+		Search:      buildBinding(kb.Search, []string{"/"}, "search"),
+		ClearEsc:    buildBinding(kb.ClearEsc, []string{"esc"}, "clear/exit search"),
+		Select:      buildBinding(kb.Select, []string{"enter"}, "select"),
+		Copy:        buildBinding(kb.Copy, []string{"c"}, "copy"),
+		Quit:        buildBinding(kb.Quit, []string{"q", "ctrl+c"}, "quit"),
+		Create:      buildBinding(kb.Create, []string{"n"}, "new"),
+		Edit:        buildBinding(kb.Edit, []string{"e"}, "edit"),
+		Delete:      buildBinding(kb.Delete, []string{"d"}, "delete"),
+		FormTab:     key.NewBinding(key.WithKeys("tab"), key.WithHelp("tab", "next field")),
+		FormBackTab: key.NewBinding(key.WithKeys("shift+tab"), key.WithHelp("shift+tab", "prev field")),
+	}
 }
 
 func (k keyMap) ShortHelp() []key.Binding {

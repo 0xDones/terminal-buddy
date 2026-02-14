@@ -4,17 +4,19 @@ A terminal UI for organizing and quickly accessing your shell commands. Browse, 
 
 ## Install
 
-Requires Go 1.25.6+.
-
-```bash
-go install tb@latest
-```
-
-Or build from source:
+Requires Go 1.25.6+ and Make.
 
 ```bash
 git clone <repo-url> && cd terminal-buddy
-go build -o tb .
+make build
+```
+
+The version is derived automatically from git tags (`git describe --tags`). To create a release, tag the commit first:
+
+```bash
+git tag v0.1.0
+make build
+tb version  # tb v0.1.0 (go1.25.6)
 ```
 
 ## Usage
@@ -23,6 +25,12 @@ Launch the TUI:
 
 ```bash
 tb
+```
+
+Check version:
+
+```bash
+tb version
 ```
 
 ### Keybindings
@@ -38,6 +46,8 @@ tb
 | `e` | Edit selected command |
 | `d` | Delete selected command |
 | `q` / `Ctrl+C` | Quit |
+
+All keybindings are customizable — see [Configuration](#custom-keybindings).
 
 ## Shell Integration
 
@@ -108,6 +118,28 @@ Each command has four fields:
 | `command` | Yes | The shell command to run |
 | `description` | No | Longer explanation shown in the detail pane |
 | `category` | No | Used for tab-based filtering |
+
+### Custom Keybindings
+
+Override default key mappings by adding a `keybindings` section to `~/.tb.yaml`. Only the keys you want to change need to be specified — omitted keys keep their defaults.
+
+```yaml
+keybindings:
+  up: ["up", "k"]
+  down: ["down", "j"]
+  next_tab: ["tab"]
+  prev_tab: ["shift+tab"]
+  search: ["/"]
+  clear_esc: ["esc"]
+  select: ["enter"]
+  copy: ["c"]
+  quit: ["q", "ctrl+c"]
+  create: ["n"]
+  edit: ["e"]
+  delete: ["d"]
+```
+
+Keys use [BubbleTea key identifiers](https://pkg.go.dev/github.com/charmbracelet/bubbletea#KeyMsg): `"up"`, `"down"`, `"tab"`, `"shift+tab"`, `"enter"`, `"esc"`, `"ctrl+c"`, or any single character like `"k"`, `"/"`, `"q"`.
 
 ## Requirements
 
