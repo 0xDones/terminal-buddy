@@ -4,20 +4,39 @@ A terminal UI for organizing and quickly accessing your shell commands. Browse, 
 
 ## Install
 
+### From GitHub Releases (recommended)
+
+Download the latest binary for your platform from [Releases](https://github.com/0xDones/terminal-buddy/releases):
+
+```bash
+# Linux (amd64)
+curl -Lo tb.tar.gz https://github.com/0xDones/terminal-buddy/releases/latest/download/tb_linux_amd64.tar.gz
+tar xzf tb.tar.gz
+sudo mv tb /usr/local/bin/
+
+# macOS (Apple Silicon)
+curl -Lo tb.tar.gz https://github.com/0xDones/terminal-buddy/releases/latest/download/tb_darwin_arm64.tar.gz
+tar xzf tb.tar.gz
+sudo mv tb /usr/local/bin/
+```
+
+Verify the download (optional):
+
+```bash
+curl -Lo checksums.txt https://github.com/0xDones/terminal-buddy/releases/latest/download/checksums.txt
+sha256sum --check --ignore-missing checksums.txt
+```
+
+### Build from Source
+
 Requires Go 1.25.6+ and Make.
 
 ```bash
-git clone <repo-url> && cd terminal-buddy
+git clone https://github.com/0xDones/terminal-buddy.git && cd terminal-buddy
 make build
 ```
 
-The version is derived automatically from git tags (`git describe --tags`). To create a release, tag the commit first:
-
-```bash
-git tag v0.1.0
-make build
-tb version  # tb v0.1.0 (go1.25.6)
-```
+The binary version is derived automatically from git tags (`git describe --tags`).
 
 ## Usage
 
