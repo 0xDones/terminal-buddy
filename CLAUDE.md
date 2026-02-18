@@ -30,3 +30,19 @@ make fmt
 # Tidy dependencies
 make tidy
 ```
+
+## CI/CD & Releases
+
+Releases are fully automated via [Release Please](https://github.com/googleapis/release-please). No manual tagging required.
+
+**How it works:** Merge PRs with [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, etc.) to main. Release Please opens a release PR that accumulates changes. Merging that PR auto-creates a git tag + GitHub Release, then GoReleaser builds and uploads cross-platform binaries.
+
+```bash
+# Validate GoReleaser config
+goreleaser check
+
+# Local dry-run (builds all platforms, doesn't publish)
+goreleaser release --snapshot --clean
+```
+
+CI workflow (`.github/workflows/ci.yml`) runs `go vet`, `go test`, and `go build` on PRs and main pushes.
