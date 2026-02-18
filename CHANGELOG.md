@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/0xDones/terminal-buddy/compare/v1.0.0...v1.0.1) (2026-02-18)
+
+
+### Bug Fixes
+
+* remove version from release binary names ([d9a754b](https://github.com/0xDones/terminal-buddy/commit/d9a754b8361d287eebe939581b456249f4dcd1da))
+* remove version from release binary names ([0d193ca](https://github.com/0xDones/terminal-buddy/commit/0d193ca9a5a811bfac6eb8397b54dd8d0ac742a5))
+
 ## 1.0.0 (2026-02-18)
 
 
