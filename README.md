@@ -10,21 +10,12 @@ Download the latest binary for your platform from [Releases](https://github.com/
 
 ```bash
 # Linux (amd64)
-curl -Lo tb.tar.gz https://github.com/0xDones/terminal-buddy/releases/latest/download/tb_linux_amd64.tar.gz
-tar xzf tb.tar.gz
-sudo mv tb /usr/local/bin/
+curl -Lo /usr/local/bin/tb https://github.com/0xDones/terminal-buddy/releases/latest/download/tb_linux_amd64
+chmod +x /usr/local/bin/tb
 
 # macOS (Apple Silicon)
-curl -Lo tb.tar.gz https://github.com/0xDones/terminal-buddy/releases/latest/download/tb_darwin_arm64.tar.gz
-tar xzf tb.tar.gz
-sudo mv tb /usr/local/bin/
-```
-
-Verify the download (optional):
-
-```bash
-curl -Lo checksums.txt https://github.com/0xDones/terminal-buddy/releases/latest/download/checksums.txt
-sha256sum --check --ignore-missing checksums.txt
+curl -Lo /usr/local/bin/tb https://github.com/0xDones/terminal-buddy/releases/latest/download/tb_darwin_arm64
+chmod +x /usr/local/bin/tb
 ```
 
 ### Build from Source
