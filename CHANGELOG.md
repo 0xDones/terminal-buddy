@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0](https://github.com/0xDones/terminal-buddy/compare/v1.0.1...v1.1.0) (2026-02-19)
+
+
+### Features
+
+* friendly output when running tb without shell integration ([519a6cf](https://github.com/0xDones/terminal-buddy/commit/519a6cf77540bd8c4ab9e07cd8c63dcddd9c263e))
+* prefill command line when running tb directly via shell wrapper ([36929ef](https://github.com/0xDones/terminal-buddy/commit/36929eff28291b26ab77caf7fc5b7fef411dbe62))
+* prefill command line when running tb directly via shell wrapper ([ebfcd23](https://github.com/0xDones/terminal-buddy/commit/ebfcd233fbcae576b94523a1ae10338d3dd0eef9))
+
 ## [1.0.1](https://github.com/0xDones/terminal-buddy/compare/v1.0.0...v1.0.1) (2026-02-18)
 
 
