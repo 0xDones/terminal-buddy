@@ -2,6 +2,8 @@
 
 A terminal UI for organizing and quickly accessing your shell commands. Browse, search, and select commands from a categorized list — then paste them directly into your shell prompt.
 
+![tb screenshot](docs/assets/tb.png)
+
 ## Install
 
 ### From GitHub Releases (recommended)
