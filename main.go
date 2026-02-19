@@ -5,7 +5,6 @@ import (
 	"os"
 	"runtime"
 
-	"tb/internal/clipboard"
 	"tb/internal/config"
 	"tb/internal/shell"
 	"tb/internal/ui"
@@ -61,8 +60,6 @@ func main() {
 
 	if result, ok := finalModel.(ui.Model); ok {
 		if sel := result.Selected(); sel != nil {
-			// Best-effort clipboard copy (ignore errors for headless/no-xclip)
-			_ = clipboard.Write(sel.Command)
 			// Print to stdout for shell integration / piping
 			fmt.Print(sel.Command)
 		}
