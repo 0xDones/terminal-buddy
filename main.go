@@ -5,13 +5,13 @@ import (
 	"os"
 	"runtime"
 
-	"tb/internal/clipboard"
 	"tb/internal/config"
 	"tb/internal/shell"
 	"tb/internal/ui"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mattn/go-isatty"
 )
 
 var version = "dev"
@@ -61,10 +61,24 @@ func main() {
 
 	if result, ok := finalModel.(ui.Model); ok {
 		if sel := result.Selected(); sel != nil {
-			// Best-effort clipboard copy (ignore errors for headless/no-xclip)
-			_ = clipboard.Write(sel.Command)
-			// Print to stdout for shell integration / piping
-			fmt.Print(sel.Command)
+			if isatty.IsTerminal(os.Stdout.Fd()) {
+				// Stdout is a terminal — no shell integration is capturing output.
+				// Show a friendly summary on stderr instead of bare stdout.
+				r := lipgloss.DefaultRenderer()
+				label := r.NewStyle().Bold(true).Foreground(lipgloss.Color("39"))
+				cmd := r.NewStyle().Foreground(lipgloss.Color("114"))
+				dim := r.NewStyle().Foreground(lipgloss.Color("242"))
+				hint := r.NewStyle().Foreground(lipgloss.Color("39"))
+				fmt.Fprintf(os.Stderr, "\n%s\n\n%s\n\n%s %s\n",
+					label.Render(sel.Name),
+					cmd.Render("$ "+sel.Command),
+					dim.Render("Tip: add"),
+					hint.Render("eval \"$(tb init <shell>)\"")+dim.Render(" to your shell config so commands prefill your prompt."),
+				)
+			} else {
+				// Stdout is a pipe — shell integration is capturing output.
+				fmt.Print(sel.Command)
+			}
 		}
 	}
 }

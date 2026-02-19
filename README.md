@@ -50,7 +50,7 @@ tb version
 | `↑`/`k` `↓`/`j` | Navigate commands |
 | `Tab` / `Shift+Tab` | Switch category tabs |
 | `/` | Search |
-| `Enter` | Select command (copies to clipboard, prints to stdout, exits) |
+| `Enter` | Select command (exits and prefills your prompt) |
 | `c` | Copy highlighted command to clipboard (stays in TUI) |
 | `n` | Create new command |
 | `e` | Edit selected command |
@@ -61,7 +61,10 @@ All keybindings are customizable — see [Configuration](#custom-keybindings).
 
 ## Shell Integration
 
-Add one line to your shell config to bind `Ctrl+O` — pressing it opens `tb`, and the selected command is placed directly into your prompt for review before executing.
+**Shell integration is required for `tb` to work properly.** Without it, selected commands are only printed to stdout instead of being placed on your command line. Adding the init line below gives you two things:
+
+1. **`Ctrl+O` keybind** — opens `tb` from anywhere in your prompt, selected command is inserted at the cursor.
+2. **`tb` wrapper function** — typing `tb` directly also prefills your prompt with the selected command (zsh uses `print -z`, bash adds to history, fish uses `commandline`).
 
 ### Bash
 
@@ -153,4 +156,5 @@ Keys use [BubbleTea key identifiers](https://pkg.go.dev/github.com/charmbracelet
 
 ## Requirements
 
-- **Clipboard** (optional): On Linux, `xclip` or `xsel` must be installed for clipboard support. macOS and Windows work out of the box. If unavailable, `tb` still prints to stdout — clipboard is best-effort.
+- **Shell integration** (strongly recommended): See [Shell Integration](#shell-integration). Without it, `tb` can only print the selected command to stdout.
+- **Clipboard** (optional): On Linux, `xclip` or `xsel` must be installed for the `c` (copy) key to work. macOS and Windows work out of the box.
